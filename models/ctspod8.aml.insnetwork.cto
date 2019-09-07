@@ -1,0 +1,49 @@
+/**
+ * POD8 Insurance consortium to solve primarily two problems:
+ *   1. Money Laundering and Frauds in New Business and Claims processing
+ *   2. Build-up of Unclaimed amount owing to dated customer contact details
+ *	 Business case: validate if any similar policy is already rejected by other insurers 
+ *   Business case: validate if customer is flagged for any fraud or medical reason
+ *   Business case: validate if customer already has any other term policy
+ *   Business case: validate if the total SA for other policies is correctly mentioned by customer 
+ */
+namespace ctspod8.aml.insnetwork
+
+asset PolicyApplication identified by applicationId {
+    o String applicationId
+    o String description
+    o String policyType // Endowment,Term,MoneyBack
+    o String applicationStatus // Applied,Approved,Rejected,Waiting
+    o String applicationStatusReason
+    o Double sumAssuredPolicy
+    o Double sumAssuredOtherPolicies
+    --> Customer customer
+}
+
+asset Customer identified by aadhar {
+    o String aadhar
+    o String firstName
+    o String lastName
+    o String flagCode // None,Medical,Fraud
+    o String flagCodeReason // Description of Medical or Fraud reason
+}
+
+transaction updateCust {
+    --> Customer cust
+    o String newflagCode // Medical,Fraud
+    o String newflagCodeReason // Description of Medical or Fraud reason
+}
+
+transaction validateCust {
+    --> Customer customer
+}
+
+transaction updatePolicyApplication {
+    --> PolicyApplication policyAppl
+    o String newapplicationStatus
+    o String newapplicationStatusReason
+}
+
+transaction validatePolicyApplication {
+    --> PolicyApplication policyAppl
+}
