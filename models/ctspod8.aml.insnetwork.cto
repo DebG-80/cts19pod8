@@ -43,18 +43,18 @@ asset Customer identified by aadhar {
     o String firstName
     o String lastName
     o CustFlagCode custFlagCode default="NONE" 
-    o String custFlagCodeReason optional // Description of Medical or Fraud reason
-    o DateTime custFlagCodeDt
-    o Double sumAssuredTermPolicies optional
-    o Double sumAssuredOtherPolicies optional  
+    o String custFlagCodeReason optional // Description of Customer Flag code reason
+    o DateTime custFlagCodeChngDt
+    o Double sumAssuredTermPolicies optional // Total SA of all Term Policies of this Customer
+    o Double sumAssuredOtherPolicies optional // Total SA of all policies except term Policies of this Customer 
     o String lastUpdAgentId
 }
 
 enum CustFlagCode {
     o NONE
     o MEDICAL 
-    o ML
-    o PA
+    o ML // Money Laundering
+    o PA // Politically Active
     o CRIMINAL
 }
 
@@ -77,6 +77,9 @@ transaction updateCust {
 }
 
 event CustStatusChngEvent {
+    --> Customer cust
+    o String oldVal // old value for customer flag code
+    o String newVal // new value for customer flag code 
 }
 
 transaction validateCust {
