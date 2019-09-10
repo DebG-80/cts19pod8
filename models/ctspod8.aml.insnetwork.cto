@@ -29,6 +29,7 @@ enum PolStatus {
     o LAPSED
     o MATURED
     o CANCELLED
+    // PENDING validation to be added
 }
 
 enum PolType {
