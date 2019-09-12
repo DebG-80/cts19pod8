@@ -14,7 +14,7 @@ asset Policy identified by applicationId {
     o String applicationId
     o String description optional
     o PolType policyType default="TERM"
-    o PolStatus polstatus default="PENDING"
+    o PolStatus policyStatus default="PENDING_VALIDTION"
     o String policyStatusReason optional
     o Double sumAssuredPolicy
     o Double sumAssuredOtherPolicies optional
@@ -23,9 +23,11 @@ asset Policy identified by applicationId {
 }
 
 enum PolStatus {
-    o PENDING
-    o REJECTED 
-    o IN_FORCE
+    o PENDING_VALIDTION
+    o VALIDATION_APPROVED
+    o VALIDATION_REJECTED
+    o REJECTED  // To be changed by Insurance Agent
+    o IN_FORCE  // To be changed by Insurance Agent
     o LAPSED
     o MATURED
     o CANCELLED
@@ -71,7 +73,7 @@ enum ClmStatus {
     o APPROVED
 }
 
-transaction updateCust {
+transaction updateCust { // To change Customer flag code based on life events
     --> Customer cust
     o CustFlagCode newflagCode 
     o String newflagCodeReason // Description of Medical or Fraud reason
@@ -88,6 +90,10 @@ transaction validateCust {
 }
 
 transaction updatePolicy {
+    --> Policy policyAppl
+}
+
+transaction validatePolicy { // validating policy
     --> Policy policyAppl
     o PolStatus newapplicationStatus
     o String newapplicationStatusReason
