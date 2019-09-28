@@ -14,31 +14,33 @@ asset Policy identified by applicationId {
     o String applicationId
     o String description optional
     o PolType policyType default="TERM"
-    o PolStatus policyStatus default="PENDING_VALIDTION"
+    o PolStatus policyStatus default="PENDING_VALIDATION"
     o String policyStatusReason optional
+    o PolStatus postPolicyApprovedStatus default="VALIDATION_APPROVED"
+    o String postPolicyApprovedStatusReason optional // To be updated in case cust status changes after Policy approval
     o Double sumAssuredPolicy
     o Double sumAssuredOtherPolicies optional
     --> Customer customer
-    o String lastUpdAgentId
+    o String lastUpdAgentId optional
 }
 
 enum PolStatus {
-    o PENDING_VALIDTION
-    o VALIDATION_APPROVED
-    o VALIDATION_REJECTED
-    o REJECTED  // To be changed by Insurance Agent
-    o IN_FORCE  // To be changed by Insurance Agent
-    o LAPSED
-    o MATURED
-    o CANCELLED
-    // PENDING validation to be added
+    o PENDING_VALIDATION     // Created by Co. representative while registering policy
+    o VALIDATION_APPROVED   // Changed by smart contract
+    o VALIDATION_REJECTED   // Changed by smart contract
+    o APPROVED  // To be changed by Insurance Co. representative
+    o REJECTED  // To be changed by Insurance Co. representative
+    o IN_FORCE  // To be changed by Insurance Co. representative
+    o LAPSED    // To be changed by Insurance Co. representative
+    o MATURED   // To be changed by Insurance Co. representative
+    o CANCELLED // To be changed by Insurance Co. representative
 }
 
 enum PolType {
     o ENDOWMENT
     o MONEYBACK
     o TERM
-    o PENSION
+    o MEDICLAIM // Personal
 }
 
 asset Customer identified by aadhar {
@@ -50,27 +52,33 @@ asset Customer identified by aadhar {
     o DateTime custFlagCodeChngDt
     o Double sumAssuredTermPolicies optional // Total SA of all Term Policies of this Customer
     o Double sumAssuredOtherPolicies optional // Total SA of all policies except term Policies of this Customer 
-    o String lastUpdAgentId
+    o String lastUpdAgentId optional
 }
 
 enum CustFlagCode {
     o NONE
     o MEDICAL 
     o ML // Money Laundering
-    o PA // Politically Active
     o CRIMINAL
 }
 
 asset Claim identified by claimId{
     o String claimId
-    o ClmStatus clmStatus
+    o ClmStatus clmStatus default="PENDING_VALIDATION"
+    o String clmStatusReason optional
+    o DateTime fromHospDt optional // for mediclaim
+    o DateTime toHospDt optional // for mediclaim
+    o String amount
     --> Policy policy
+    o String lastUpdAgentId optional 
 }
 
 enum ClmStatus {
-    o PENDING
-    o REJECTED 
-    o APPROVED
+    o PENDING_VALIDATION     // Created by Co. representative while registering policy
+    o VALIDATION_APPROVED   // Changed by smart contract
+    o VALIDATION_REJECTED   // Changed by smart contract
+    o APPROVED  // To be changed by Insurance Co. representative
+    o REJECTED  // To be changed by Insurance Co. representative
 }
 
 transaction updateCust { // To change Customer flag code based on life events
@@ -85,16 +93,16 @@ event CustStatusChngEvent {
     o String newVal // new value for customer flag code 
 }
 
-transaction validateCust {
-    --> Customer customer
-}
-
-transaction updatePolicy {
+transaction vaildatePolicy { // by smart contract
     --> Policy policyAppl
 }
 
-transaction validatePolicy { // validating policy
+transaction updatePolicy { // by insurance companies, direct update
     --> Policy policyAppl
-    o PolStatus newapplicationStatus
-    o String newapplicationStatusReason
+    o String newStatus
+    o String newStatusReason
+}
+
+transaction vaildateClaim {
+    --> Claim claim
 }
