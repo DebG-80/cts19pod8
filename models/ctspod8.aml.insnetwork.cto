@@ -20,7 +20,7 @@ asset Policy identified by applicationId {
     o String postPolicyApprovedStatusReason optional // To be updated in case cust status changes after Policy approval
     o Double sumAssuredPolicy
     o Double sumAssuredOtherPolicies optional
-    --> Customer customer
+    --> Customer customer // assuming only customers are covered by Policy
     o String lastUpdAgentId optional
 }
 
