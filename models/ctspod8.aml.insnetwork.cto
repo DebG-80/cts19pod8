@@ -49,7 +49,7 @@ asset Customer identified by aadhar {
     o String lastName
     o CustFlagCode custFlagCode default="NONE" 
     o String custFlagCodeReason optional // Description of Customer Flag code reason
-    o DateTime custFlagCodeChngDt
+    o DateTime custFlagCodeChngDt optional
     o Double sumAssuredTermPolicies optional // Total SA of all Term Policies of this Customer
     o Double sumAssuredOtherPolicies optional // Total SA of all policies except term Policies of this Customer 
     o String lastUpdAgentId optional
@@ -70,6 +70,7 @@ asset Claim identified by claimId{
     o DateTime toHospDt optional // for mediclaim
     o String amount
     --> Policy policy
+    o String claimantAadhar
     o String lastUpdAgentId optional 
 }
 
