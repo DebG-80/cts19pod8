@@ -3,7 +3,7 @@
     "composer": "^0.20.8"
   },
   "name": "insnetwork",
-  "version": "3.6.2",
+  "version": "3.7.0",
   "description": "POD8 Insurance problem",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/insnetwork.bna",
